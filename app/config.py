@@ -1,0 +1,22 @@
+import os
+from dataclasses import dataclass
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+@dataclass(frozen=True)
+class Settings:
+    db_path: str = os.environ.get("DB_PATH", str(BASE_DIR / "data" / "news.db"))
+    newsdata_api_key: str = os.environ.get("NEWSDATA_API_KEY", "")
+    google_application_credentials: str = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "")
+    gemini_api_key: str = os.environ.get("GEMINI_API_KEY", "")
+    rolling_window_days: int = int(os.environ.get("ROLLING_WINDOW_DAYS", "7"))
+    cluster_distance_threshold: float = float(os.environ.get("CLUSTER_DISTANCE_THRESHOLD", "0.4"))
+
+
+settings = Settings()
