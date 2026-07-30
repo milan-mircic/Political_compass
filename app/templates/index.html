@@ -14,14 +14,43 @@
 
     <main>
         {% if stories %}
-            <ul class="stories">
+            <div class="stories">
             {% for story in stories %}
-                <li class="story">
-                    <h2>{{ story["title"] }}</h2>
-                    <p>{{ story["summary"] }}</p>
-                </li>
+                <article class="story-card">
+                    <h2 class="story-title">{{ story.title }}</h2>
+                    <p class="story-summary">{{ story.summary }}</p>
+
+                    <div class="orientation-grid">
+                        {% for o in story.orientations %}
+                            <div class="orientation-col">
+                                <div class="orientation-header">
+                                    <span class="orientation-name">{{ o.key | capitalize }}</span>
+                                    <span class="coverage-value">{{ o.coverage_count }}/{{ o.panel_size }}</span>
+                                </div>
+
+                                <div class="meter"
+                                     role="img"
+                                     aria-label="{{ o.coverage_count }} of {{ o.panel_size }} {{ o.key }} outlets covered this story">
+                                    <div class="meter-fill" style="width: {{ o.coverage_pct }}%"></div>
+                                </div>
+
+                                {% if o.coverage_count > 0 %}
+                                    <div class="sentiment-badge sentiment-{{ o.sentiment_label }}">
+                                        <span class="sentiment-dot"></span>
+                                        <span>{{ o.sentiment_text }}</span>
+                                    </div>
+                                    {% if o.framing %}
+                                        <p class="framing-text">{{ o.framing }}</p>
+                                    {% endif %}
+                                {% else %}
+                                    <p class="empty-orientation">No coverage from this orientation.</p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </article>
             {% endfor %}
-            </ul>
+            </div>
         {% else %}
             <p class="empty">No stories yet. Run the pipeline to populate the database.</p>
         {% endif %}
