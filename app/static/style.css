@@ -3,6 +3,12 @@
     --fg: #1a1a1a;
     --bg: #ffffff;
     --muted: #666666;
+    --card-bg: #fcfcfb;
+    --border: rgba(11, 11, 11, 0.10);
+    --good: #0ca30c;
+    --critical: #d03b3b;
+    --meter-track: #cde2fb;
+    --meter-fill: #2a78d6;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -10,12 +16,16 @@
         --fg: #eaeaea;
         --bg: #121212;
         --muted: #999999;
+        --card-bg: #1a1a19;
+        --border: rgba(255, 255, 255, 0.10);
+        --meter-track: #184f95;
+        --meter-fill: #3987e5;
     }
 }
 
 body {
     font-family: system-ui, -apple-system, sans-serif;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 2rem 1rem;
     color: var(--fg);
@@ -27,11 +37,105 @@ header p, .empty {
 }
 
 .stories {
-    list-style: none;
-    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
-.story {
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--muted);
+.story-card {
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card-bg);
+}
+
+.story-title {
+    margin: 0 0 0.4rem;
+}
+
+.story-summary {
+    margin: 0 0 1.25rem;
+    color: var(--muted);
+}
+
+.orientation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.orientation-col {
+    min-width: 0;
+}
+
+.orientation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.35rem;
+}
+
+.orientation-name {
+    font-weight: 600;
+}
+
+.coverage-value {
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.meter {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--meter-track);
+    overflow: hidden;
+    margin-bottom: 0.6rem;
+}
+
+.meter-fill {
+    height: 100%;
+    background: var(--meter-fill);
+    border-radius: 3px;
+}
+
+.sentiment-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+}
+
+.sentiment-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--muted);
+    flex-shrink: 0;
+}
+
+.sentiment-positive .sentiment-dot {
+    background: var(--good);
+}
+
+.sentiment-negative .sentiment-dot {
+    background: var(--critical);
+}
+
+.sentiment-pending {
+    color: var(--muted);
+    font-style: italic;
+}
+
+.framing-text {
+    margin: 0;
+    font-size: 0.92rem;
+}
+
+.empty-orientation {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-style: italic;
 }
