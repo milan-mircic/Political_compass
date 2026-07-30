@@ -17,6 +17,7 @@ class Settings:
     gemini_api_key: str = os.environ.get("GEMINI_API_KEY", "")
     rolling_window_days: int = int(os.environ.get("ROLLING_WINDOW_DAYS", "7"))
     cluster_distance_threshold: float = float(os.environ.get("CLUSTER_DISTANCE_THRESHOLD", "0.4"))
+    pipeline_interval_hours: float = float(os.environ.get("PIPELINE_INTERVAL_HOURS", "6"))
 
 
 settings = Settings()
