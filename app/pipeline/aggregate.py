@@ -1,11 +1,17 @@
+import time
+
 from google import genai
+from google.genai import errors as genai_errors
 from pydantic import BaseModel
 
 from app.config import settings
 from app.db import get_connection
 
-_MODEL_NAME = "gemini-flash-latest"
+_MODEL_NAME = "gemini-flash-lite-latest"
 _MAX_EXCERPTS_PER_ORIENTATION = 5
+# Free-tier quota for this model is 20 requests/minute; pace calls to stay
+# safely under that instead of bursting and relying on retries.
+_REQUEST_INTERVAL_SECONDS = 3.5
 ORIENTATIONS = ("left", "center", "right")
 
 
@@ -80,14 +86,22 @@ def aggregate_stories() -> None:
                 for orientation, members in by_orientation.items()
             }
 
-            response = client.models.generate_content(
-                model=_MODEL_NAME,
-                contents=_build_prompt(titles_by_orientation),
-                config={
-                    "response_mime_type": "application/json",
-                    "response_schema": StoryAnalysis,
-                },
-            )
+            try:
+                response = client.models.generate_content(
+                    model=_MODEL_NAME,
+                    contents=_build_prompt(titles_by_orientation),
+                    config={
+                        "response_mime_type": "application/json",
+                        "response_schema": StoryAnalysis,
+                    },
+                )
+            except genai_errors.APIError:
+                # A transient failure (e.g. model overload or rate limit)
+                # on one story shouldn't block the rest; aggregated_at
+                # stays NULL so it's retried on the next pipeline run.
+                time.sleep(_REQUEST_INTERVAL_SECONDS)
+                continue
+            time.sleep(_REQUEST_INTERVAL_SECONDS)
             analysis: StoryAnalysis = response.parsed
 
             conn.execute(
