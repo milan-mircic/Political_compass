@@ -10,7 +10,7 @@
     --meter-track: #cde2fb;
     --meter-fill: #2a78d6;
     --accent-left: #4a3aa7;
-    --accent-center: #1baf7a;
+    --accent-center: #946200;
     --accent-right: #eb6834;
     --page-gradient: radial-gradient(circle at 15% 0%, rgba(74, 58, 167, 0.06), transparent 45%),
         radial-gradient(circle at 85% 15%, rgba(235, 104, 52, 0.06), transparent 45%);
@@ -26,7 +26,7 @@
         --meter-track: #184f95;
         --meter-fill: #3987e5;
         --accent-left: #9085e9;
-        --accent-center: #199e70;
+        --accent-center: #eab308;
         --accent-right: #d95926;
         --page-gradient: radial-gradient(circle at 15% 0%, rgba(144, 133, 233, 0.10), transparent 45%),
             radial-gradient(circle at 85% 15%, rgba(217, 89, 38, 0.10), transparent 45%);
