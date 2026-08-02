@@ -55,8 +55,20 @@ def _build_prompt(titles_by_orientation: dict[str, list[str]]) -> str:
 def aggregate_stories() -> None:
     conn = get_connection()
     try:
+        # Only the top N stories (by article count) are ever shown on the
+        # frontend -- rank before spending any Gemini calls, not after, so a
+        # busy news day doesn't burn quota summarizing stories nobody sees.
         stories = conn.execute(
-            "SELECT id FROM stories WHERE aggregated_at IS NULL OR aggregated_at < updated_at"
+            """
+            SELECT s.id
+            FROM stories s
+            JOIN articles a ON a.story_id = s.id
+            WHERE s.aggregated_at IS NULL OR s.aggregated_at < s.updated_at
+            GROUP BY s.id
+            ORDER BY COUNT(a.id) DESC
+            LIMIT ?
+            """,
+            (settings.top_stories_limit,),
         ).fetchall()
         if not stories:
             return

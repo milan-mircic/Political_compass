@@ -6,6 +6,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from app.config import settings
 from app.db import get_cursor
 from app.scheduler import start_scheduler
 
@@ -71,8 +72,9 @@ def index(request: Request):
             WHERE s.aggregated_at IS NOT NULL
             GROUP BY s.id
             ORDER BY total_coverage DESC, s.updated_at DESC
-            LIMIT 10
-            """
+            LIMIT ?
+            """,
+            (settings.top_stories_limit,),
         )
         story_rows = cur.fetchall()
 
