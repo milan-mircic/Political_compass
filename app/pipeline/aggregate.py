@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from app.config import settings
 from app.db import get_connection
 
-_MODEL_NAME = "gemini-2.5-flash"
+_MODEL_NAME = "gemini-flash-latest"
 _MAX_EXCERPTS_PER_ORIENTATION = 5
 ORIENTATIONS = ("left", "center", "right")
 
