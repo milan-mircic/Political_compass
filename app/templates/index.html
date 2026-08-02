@@ -7,11 +7,6 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <header>
-        <h1>News Ideology Tracker</h1>
-        <p>Coverage, sentiment, and framing across left / center / right US news outlets.</p>
-    </header>
-
     <main>
         {% if stories %}
             <div class="stories">
@@ -22,7 +17,7 @@
 
                     <div class="orientation-grid">
                         {% for o in story.orientations %}
-                            <div class="orientation-col">
+                            <div class="orientation-col orientation-{{ o.key }}">
                                 <div class="orientation-header">
                                     <span class="orientation-name">{{ o.key | capitalize }}</span>
                                     <span class="coverage-value">{{ o.coverage_count }}/{{ o.panel_size }}</span>
